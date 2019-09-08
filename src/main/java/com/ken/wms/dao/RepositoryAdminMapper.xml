@@ -6,7 +6,7 @@
 <mapper namespace="com.ken.wms.dao.RepositoryAdminMapper">
 
 	<resultMap type="com.ken.wms.domain.RepositoryAdmin" id="repositoryAdmin">
-		<id property="id" column="REPO_ADMIN_ID"/>
+		<result property="id" column="REPO_ADMIN_ID"/>
 		<result property="name" column="REPO_ADMIN_NAME"/>
 		<result property="sex" column="REPO_ADMIN_SEX"/>
 		<result property="tel" column="REPO_ADMIN_TEL"/>
@@ -27,7 +27,9 @@
 			q.REPO_ADMIN_REPOID,
 			w.REPO_ADDRESS
 		from
-			wms_repo_admin q, wms_respository w where q.REPO_ADMIN_REPOID = w.REPO_ID
+			wms_repo_admin q, wms_respository w
+		where
+		    q.REPO_ADMIN_REPOID = w.REPO_ID
 	</select>
 
 	<select id="selectByID" resultMap="repositoryAdmin">
@@ -76,8 +78,8 @@
 	</select>
 	
 	<insert id="insert" keyProperty="id" useGeneratedKeys="true">
-		insert into wms_repo_admin(REPO_ADMIN_NAME,REPO_ADMIN_SEX,REPO_ADMIN_TEL,REPO_ADMIN_ADDRESS,REPO_ADMIN_BIRTH,REPO_ADMIN_REPOID)
-		values(#{name},#{sex},#{tel},#{address},#{birth},#{repositoryBelongID})
+		insert into wms_repo_admin(REPO_ADMIN_ID,REPO_ADMIN_NAME,REPO_ADMIN_SEX,REPO_ADMIN_TEL,REPO_ADMIN_ADDRESS,REPO_ADMIN_BIRTH,REPO_ADMIN_REPOID)
+		values(#{id},#{name},#{sex},#{tel},#{address},#{birth},#{repositoryBelongID})
 	</insert>
 	
 	<insert id="insertBatch">

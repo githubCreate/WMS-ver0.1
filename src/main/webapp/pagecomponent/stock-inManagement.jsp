@@ -284,6 +284,7 @@
 				return;
 			}
 
+			stockin_repository = $('#repository_selector option:selected').val();
 			data = {
 				repositoryID : stockin_repository,
 				supplierID : stockin_supplier,

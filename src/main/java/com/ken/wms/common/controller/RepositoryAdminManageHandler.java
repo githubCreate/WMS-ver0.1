@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -89,13 +86,14 @@ public class RepositoryAdminManageHandler {
     @ResponseBody
     Map<String, Object> getRepositoryAdmin(@RequestParam("searchType") String searchType,
                                            @RequestParam("keyWord") String keyWord, @RequestParam("offset") int offset,
-                                           @RequestParam("limit") int limit) throws RepositoryAdminManageServiceException {
+                                           @RequestParam("limit") int limit) throws RepositoryAdminManageServiceException, UnsupportedEncodingException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
 
         List<RepositoryAdmin> rows = null;
         long total = 0;
 
+        keyWord = new String(keyWord.getBytes("ISO-8859-1"), "UTF-8");
         // 查询
         Map<String, Object> queryResult = query(keyWord, searchType, offset, limit);
 
@@ -119,7 +117,7 @@ public class RepositoryAdminManageHandler {
     @RequestMapping(value = "addRepositoryAdmin", method = RequestMethod.POST)
     public
     @ResponseBody
-    Map<String, Object> addRepositoryAdmin(@RequestBody RepositoryAdmin repositoryAdmin) throws RepositoryAdminManageServiceException {
+    Map<String, Object> addRepositoryAdmin(@RequestBody RepositoryAdmin repositoryAdmin) throws RepositoryAdminManageServiceException, UnsupportedEncodingException {
         // 初始化 Response
         Response responseContent = ResponseFactory.newInstance();
 

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <script>
-	var search_type_storage = "none";
+	var search_type_storage = "searchAll";
 	var search_keyWord = "";
 	var search_repository = "";
 	var select_goodsID;
@@ -78,6 +78,15 @@
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input_type').val();
 			search_repository = $('#search_input_repository').val();
+			if ($("#search_type").html() != "所有"){
+				if (search_keyWord == ""){
+					var type = "error";
+					var msg = "请输入"+$("#search_type").html();
+					var append = '';
+					showMsg(type, msg, append);
+					return;
+				}
+			}
 			tableRefresh();
 		})
 	}
@@ -186,6 +195,7 @@
 		// load info
 		$('#storage_form_edit').bootstrapValidator("resetForm", true);
 		$('#storage_goodsID_edit').text(row.goodsID);
+		$('#storage_goodsName_edit').text(row.goodsName);
 		$('#storage_repositoryID_edit').text(row.repositoryID);
 		$('#storage_number_edit').val(row.number);
 	}
@@ -550,12 +560,12 @@
 
 		<div class="row" style="margin-top: 25px">
 			<div class="col-md-5">
-				<button class="btn btn-sm btn-default" id="add_storage">
-					<span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
-				</button>
-				<button class="btn btn-sm btn-default" id="import_storage">
-					<span class="glyphicon glyphicon-import"></span> <span>导入</span>
-				</button>
+                <%--<button class="btn btn-sm btn-default" id="add_storage">
+                    <span class="glyphicon glyphicon-plus"></span> <span>添加库存信息</span>
+                </button>
+                <%--<button class="btn btn-sm btn-default" id="import_storage">
+                    <span class="glyphicon glyphicon-import"></span> <span>导入</span>
+                </button>--%>
 				<button class="btn btn-sm btn-default" id="export_storage">
 					<span class="glyphicon glyphicon-export"></span> <span>导出</span>
 				</button>
@@ -843,6 +853,13 @@
 								</label>
 								<div class="col-md-4 col-sm-4">
 									<p id="storage_goodsID_edit" class="form-control-static"></p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物名称：</span>
+								</label>
+								<div class="col-md-4 col-sm-4">
+									<p id="storage_goodsName_edit" class="form-control-static"></p>
 								</div>
 							</div>
 							<div class="form-group">

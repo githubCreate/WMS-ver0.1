@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <script>
-	var search_type_repository = "none";
+	var search_type_repository = "searchAll";
 	var search_keyWord = "";
 	var selectID;
 
@@ -46,6 +46,15 @@
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input').val();
+			if ($("#search_type").html() != "所有"){
+				if (search_keyWord == ""){
+					var type = "error";
+					var msg = "请输入"+$("#search_type").html();
+					var append = '';
+					showMsg(type, msg, append);
+					return;
+				}
+			}
 			tableRefresh();
 		})
 	}
@@ -82,7 +91,14 @@
 									},
 									{
 										field : 'status',
-										title : '状态'
+										title : '状态',
+                                        formatter : function(value, row, index) {
+                                            if (row.status == 1){
+                                                return '可用';
+                                            } else {
+                                                return '不可用';
+                                            }
+                                        }
 									},
 									{
 										field : 'area',
@@ -91,8 +107,7 @@
 									},
 									{
 										field : 'desc',
-										title : '描述',
-										visible : false
+										title : '描述'
 									},
 									{
 										field : 'operation',
@@ -572,8 +587,12 @@
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库状态：</span>
 								</label>
 								<div class="col-md-8 col-sm-8">
-									<input type="text" class="form-control" id="repository_status"
-										name="repository_status" placeholder="仓库状态">
+									<!--<input type="text" class="form-control" id="repository_status"
+										name="repository_status" placeholder="仓库状态">-->
+                                    <select name="" class="form-control" id="repository_status">
+                                        <option value="1">可用</option>
+                                        <option value="2">不可用</option>
+                                    </select>
 								</div>
 							</div>
 							<div class="form-group">
@@ -834,9 +853,13 @@
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>仓库状态：</span>
 								</label>
 								<div class="col-md-8 col-sm-8">
-									<input type="text" class="form-control"
+									<!--<input type="text" class="form-control"
 										id="repository_status_edit" name="repository_status"
-										placeholder="仓库状态">
+										placeholder="仓库状态">-->
+                                    <select name="" class="form-control" id="repository_status_edit">
+                                        <option value="1">可用</option>
+                                        <option value="2">不可用</option>
+                                    </select>
 								</div>
 							</div>
 							<div class="form-group">

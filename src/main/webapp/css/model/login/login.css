@@ -1,11 +1,24 @@
-body {
-	background: url(../../../media/images/backgroundPic.png);
-	background-size: 100%;
-	background-position: center;
-
-	margin-top:150px;
+.by {
+    background: url(../../../media/images/backgroundPic.jpg);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
+    margin-top:200px;
+    align:center;
+    margin-left: 30%;
+    /*opacity: 0.1;*/
+}
+#submit {
+    font:25px "隶书";
+    background-color: #FF0000;
 }
 
+.form-control {
+    background-color: #FF0000;
+    color: #ffffff;
+}
 #checkCodeImg:hover{
-	cursor: pointer;
+    cursor: pointer;
 }

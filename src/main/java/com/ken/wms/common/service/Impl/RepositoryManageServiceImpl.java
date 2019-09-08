@@ -275,8 +275,8 @@ public class RepositoryManageServiceImpl implements RepositoryService {
                 return false;
 
             // 检查是否已指派仓库管理员
-            RepositoryAdmin repositoryAdmin = repositoryAdminMapper.selectByRepositoryID(repositoryId);
-            if (repositoryAdmin != null)
+            List<RepositoryAdmin> repositoryAdmin = repositoryAdminMapper.selectByRepositoryID(repositoryId);
+            if (repositoryAdmin.size() > 0)
                 return false;
 
             // 删除记录
@@ -365,9 +365,15 @@ public class RepositoryManageServiceImpl implements RepositoryService {
         } catch (PersistenceException e) {
             throw new RepositoryManageServiceException(e);
         }
-        if (repositories != null)
+        if (repositories.size() > 0) {
+            for (Repository repository : repositories) {
+                List<Repository> repositoryList = repositoryMapper.selectByIDList(repository.getId());
+                if (repositoryList.size() > 3) {
+                    repositories.remove(repository);
+                }
+            }
             total = repositories.size();
-        else
+        }else
             repositories = new ArrayList<>();
 
         resultSet.put("data", repositories);

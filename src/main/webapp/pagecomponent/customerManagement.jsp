@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <script>
-	var search_type_customer = "none";
+	var search_type_customer = "searchAll";
 	var search_keyWord = "";
 	var selectID;
 
@@ -46,6 +46,15 @@
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input').val();
+			if ($("#search_type").html() != "所有"){
+				if (search_keyWord == ""){
+					var type = "error";
+					var msg = "请输入"+$("#search_type").html();
+					var append = '';
+					showMsg(type, msg, append);
+					return;
+				}
+			}
 			tableRefresh();
 		})
 	}
@@ -86,13 +95,11 @@
 									},
 									{
 										field : 'address',
-										title : '地址',
-										visible : false
+										title : '地址'
 									},
 									{
 										field : 'email',
-										title : '电子邮件',
-										visible : false
+										title : '电子邮件'
 									},
 									{
 										field : 'operation',

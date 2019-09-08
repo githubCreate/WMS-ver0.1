@@ -29,7 +29,11 @@ public interface RepositoryMapper {
 	 * @return 返回指定的Repository
 	 */
 	Repository selectByID(Integer repositoryID);
-	
+
+	List<Repository> selectByIDList(Integer repositoryID);
+
+	Repository selectByAdmin(Integer repoadminID);
+
 	/**
 	 * 选择指定 repository Address 的 repository 记录
 	 * @param address 仓库地址

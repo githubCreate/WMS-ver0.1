@@ -6,6 +6,8 @@ import com.ken.wms.common.service.Interface.RepositoryAdminManageService;
 import com.ken.wms.common.util.EJConvertor;
 import com.ken.wms.common.util.FileUtil;
 import com.ken.wms.dao.RepositoryAdminMapper;
+import com.ken.wms.dao.RepositoryMapper;
+import com.ken.wms.domain.Repository;
 import com.ken.wms.domain.RepositoryAdmin;
 import com.ken.wms.domain.UserInfoDTO;
 import com.ken.wms.exception.RepositoryAdminManageServiceException;
@@ -35,6 +37,8 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
     private EJConvertor ejConvertor;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private RepositoryMapper repositoryMapper;
 
     /**
      * 返回指定repository id 的仓库管理员记录
@@ -232,8 +236,8 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
 
                 // 若有指派的仓库则检查
                 if (repositoryAdmin.getRepositoryBelongID() != null) {
-                    RepositoryAdmin rAdminFromDB = repositoryAdminMapper.selectByRepositoryID(repositoryAdmin.getRepositoryBelongID());
-                    if (rAdminFromDB != null && !Objects.equals(rAdminFromDB.getId(), repositoryAdmin.getId()))
+                    List<RepositoryAdmin> rAdminFromDB = repositoryAdminMapper.selectByRepositoryID(repositoryAdmin.getRepositoryBelongID());
+                    if (rAdminFromDB.size() >= 3)
                         return false;
                 }
 
@@ -389,14 +393,13 @@ public class RepositoryAdminManageServiceImpl implements RepositoryAdminManageSe
         // 查询
         RepositoryAdmin repositoryAdmin;
         try {
-            repositoryAdmin = repositoryAdminMapper.selectByRepositoryID(repositoryID);
+            repositoryAdmins = repositoryAdminMapper.selectByRepositoryID(repositoryID);
         } catch (PersistenceException e) {
             throw new RepositoryAdminManageServiceException(e);
         }
 
-        if (repositoryAdmin != null) {
-            repositoryAdmins.add(repositoryAdmin);
-            total = 1;
+        if (repositoryAdmins.size() > 0) {
+            total = repositoryAdmins.size();
         }
 
         resultSet.put("data", repositoryAdmins);

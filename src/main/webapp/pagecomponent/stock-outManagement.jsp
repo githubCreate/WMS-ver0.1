@@ -10,8 +10,8 @@
 	var goodsCache = new Array();
 
 	$(function(){
-		dataValidateInit();
 		repositorySelectorInit();
+		dataValidateInit();
 		detilInfoToggle();
 		stockoutOperation();
 
@@ -277,12 +277,12 @@
 			if (!$('#stockout_form').data('bootstrapValidator').isValid()) {
 				return;
 			}
-
+			stockout_repository = $('#repository_selector option:selected').val();
 			data = {
 				customerID : stockout_customer,
 				goodsID : stockout_goods,
 				repositoryID : stockout_repository,
-				number : $('#stockout_input').val(),
+				number : $('#stockout_input').val()
 			}
 
 			$.ajax({

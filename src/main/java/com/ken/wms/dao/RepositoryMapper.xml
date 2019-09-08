@@ -35,14 +35,6 @@
 			r.REPO_DESC
 		from
 			wms_respository r
-		where not exists
-		(
-			select *
-			from
-				wms_repo_admin ra
-			where
-				ra.REPO_ADMIN_REPOID = r.REPO_ID
-		)
 	</select>
 	
 	<select id="selectByID" resultMap="repository">
@@ -57,6 +49,34 @@
 			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
 		where
 			r.REPO_ID = #{repositoryID}
+	</select>
+
+	<select id="selectByIDList" resultMap="repository">
+		select
+			r.REPO_ID,
+			r.REPO_ADDRESS,
+			r.REPO_STATUS,
+			r.REPO_AREA,
+			r.REPO_DESC,
+			ra.REPO_ADMIN_NAME
+		from
+			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
+		where
+			r.REPO_ID = #{repositoryID}
+	</select>
+
+	<select id="selectByAdmin" resultMap="repository">
+		select
+			r.REPO_ID,
+			r.REPO_ADDRESS,
+			r.REPO_STATUS,
+			r.REPO_AREA,
+			r.REPO_DESC,
+			ra.REPO_ADMIN_NAME
+		from
+			wms_respository r left join wms_repo_admin ra on(r.REPO_ID = ra.REPO_ADMIN_REPOID)
+		where
+			ra.REPO_ADMIN_ID = #{repoadminID}
 	</select>
 	
 	<select id="selectByAddress" resultMap="repository">

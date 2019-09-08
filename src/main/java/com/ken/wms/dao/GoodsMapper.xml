@@ -10,6 +10,7 @@
 		<result property="name" column="GOOD_NAME"/>
 		<result property="type" column="GOOD_RYPE"/>
 		<result property="size" column="GOOD_SIZE"/>
+		<result property="material" column="GOOD_MATERIAL"/>
 		<result property="value" column="GOOD_VALUE"/>
 	</resultMap>
 	
@@ -19,6 +20,7 @@
 			g.GOOD_NAME,
 			g.GOOD_RYPE,
 			g.GOOD_SIZE,
+			g.GOOD_MATERIAL,
 			g.GOOD_VALUE
 		from 
 			wms_goods g
@@ -30,6 +32,7 @@
 			g.GOOD_NAME,
 			g.GOOD_RYPE,
 			g.GOOD_SIZE,
+			g.GOOD_MATERIAL,
 			g.GOOD_VALUE
 		from 
 			wms_goods g
@@ -43,6 +46,7 @@
 			g.GOOD_NAME,
 			g.GOOD_RYPE,
 			g.GOOD_SIZE,
+			g.GOOD_MATERIAL,
 			g.GOOD_VALUE
 		from 
 			wms_goods g
@@ -56,6 +60,7 @@
 			g.GOOD_NAME,
 			g.GOOD_RYPE,
 			g.GOOD_SIZE,
+			g.GOOD_MATERIAL,
 			g.GOOD_VALUE
 		from 
 			wms_goods g
@@ -64,15 +69,15 @@
 	</select>
 
 	<insert id="insert">
-		insert into wms_goods(GOOD_NAME,GOOD_RYPE,GOOD_SIZE,GOOD_VALUE)
-		values (#{name},#{type},#{size},#{value})
+		insert into wms_goods(GOOD_NAME,GOOD_RYPE,GOOD_SIZE,GOOD_MATERIAL,GOOD_VALUE)
+		values (#{name},#{type},#{size},#{material},#{value})
 	</insert>
 	
 	<insert id="insertBatch">
-		insert into wms_goods(GOOD_NAME,GOOD_RYPE,GOOD_SIZE,GOOD_VALUE)
+		insert into wms_goods(GOOD_NAME,GOOD_RYPE,GOOD_SIZE,GOOD_MATERIAL,GOOD_VALUE)
 		values
 		<foreach collection="list" item="goods" separator=",">
-			(#{goods.name},#{goods.type},#{goods.size},#{goods.value})
+			(#{goods.name},#{goods.type},#{goods.size},#{goods.material},#{goods.value})
 		</foreach>
 	</insert>
 	
@@ -83,6 +88,7 @@
 			GOOD_NAME = #{name},
 			GOOD_RYPE = #{type},
 			GOOD_SIZE = #{size},
+			GOOD_MATERIAL = #{material},
 			GOOD_VALUE = #{value}
 		where
 			GOOD_ID = #{id}

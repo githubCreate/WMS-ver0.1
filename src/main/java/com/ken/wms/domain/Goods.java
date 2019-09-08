@@ -11,6 +11,7 @@ public class Goods {
 	private String name;// 货物名
 	private String type;// 货物类型
 	private String size;// 货物规格
+	private String material;// 货物材料
 	private Double value;// 货物价值
 
 	public Integer getId() {
@@ -53,9 +54,23 @@ public class Goods {
 		this.value = value;
 	}
 
-	@Override
-	public String toString() {
-		return "Goods [id=" + id + ", name=" + name + ", type=" + type + ", size=" + size + ", value=" + value + "]";
+	public String getMaterial() {
+		return material;
 	}
 
+	public void setMaterial(String material) {
+		this.material = material;
+	}
+
+	@Override
+	public String toString() {
+		return "Goods{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", type='" + type + '\'' +
+				", size='" + size + '\'' +
+				", material='" + material + '\'' +
+				", value=" + value +
+				'}';
+	}
 }

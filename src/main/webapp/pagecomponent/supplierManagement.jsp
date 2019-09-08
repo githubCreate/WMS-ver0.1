@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <script>
-	var search_type_supplier = "none";
+	var search_type_supplier = "searchAll";
 	var search_keyWord = "";
 	var selectID;
 
@@ -46,6 +46,15 @@
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input').val();
+			if ($("#search_type").html() != "所有"){
+				if (search_keyWord == ""){
+					var type = "error";
+					var msg = "请输入"+$("#search_type").html();
+					var append = '';
+					showMsg(type, msg, append);
+					return;
+				}
+			}
 			tableRefresh();
 		})
 	}
@@ -76,23 +85,21 @@
 										field : 'name',
 										title : '供应商名称'
 									},
-									{
+									/*{
 										field : 'personInCharge',
 										title : '负责人'
-									},
+									},*/
 									{
 										field : 'tel',
 										title : '联系电话'
 									},
 									{
 										field : 'address',
-										title : '地址',
-										visible : false
+										title : '地址'
 									},
 									{
 										field : 'email',
-										title : '电子邮件',
-										visible : false
+										title : '电子邮件'
 									},
 									{
 										field : 'operation',
@@ -579,14 +586,14 @@
 										name="supplier_name" placeholder="供应商名称">
 								</div>
 							</div>
-							<div class="form-group">
+							<%--<div class="form-group">
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>负责人姓名：</span>
 								</label>
 								<div class="col-md-8 col-sm-8">
 									<input type="text" class="form-control" id="supplier_person"
 										name="supplier_person" placeholder="负责人姓名">
 								</div>
-							</div>
+							</div>--%>
 							<div class="form-group">
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>联系电话：</span>
 								</label>
@@ -849,7 +856,7 @@
 										name="supplier_name" placeholder="供应商名称">
 								</div>
 							</div>
-							<div class="form-group">
+							<%--<div class="form-group">
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>负责人姓名：</span>
 								</label>
 								<div class="col-md-8 col-sm-8">
@@ -857,7 +864,7 @@
 										id="supplier_person_edit" name="supplier_person"
 										placeholder="负责人姓名">
 								</div>
-							</div>
+							</div>--%>
 							<div class="form-group">
 								<label for="" class="control-label col-md-4 col-sm-4"> <span>联系电话：</span>
 								</label>

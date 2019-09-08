@@ -2,11 +2,12 @@
 	pageEncoding="UTF-8"%>
 
 <script>
-	var search_type_repositoryAdmin = "none";
+	var search_type_repositoryAdmin = "searchAll";
 	var search_keyWord = "";
 	var selectID;
 
 	$(function() {
+		repositorySelectorInit();
 		optionAction();
 		searchAction();
 		repositoryAdminListInit();
@@ -19,6 +20,31 @@
 		importRepositoryAdminAction();
 		exportRepositoryAdminAction()
 	})
+
+	// 仓库下拉列表初始化
+	function repositorySelectorInit(){
+		$.ajax({
+			type : 'GET',
+			url : 'repositoryManage/getRepositoryList',
+			dataType : 'json',
+			contentType : 'application/json',
+			data : {
+				searchType : 'searchAll',
+				keyWord : '',
+				offset : -1,
+				limit : -1
+			},
+			success : function(response){
+				$.each(response.rows,function(index,elem){
+					$('#repositoryBelongID').append("<option value='" + elem.id + "'>" + elem.id +"号仓库</option>");
+				});
+			},
+			error : function(response){
+				$('#repositoryBelongID').append("<option value='-1'>加载失败</option>");
+			}
+
+		})
+	}
 
 	// 下拉框選擇動作
 	function optionAction() {
@@ -50,6 +76,15 @@
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input').val();
+			if ($("#search_type").html() != "所有"){
+				if (search_keyWord == ""){
+					var type = "error";
+					var msg = "请输入"+$("#search_type").html();
+					var append = '';
+					showMsg(type, msg, append);
+					return;
+				}
+			}
 			tableRefresh();
 		})
 	}
@@ -82,12 +117,18 @@
 									},
 									{
 										field : 'sex',
-										title : '性别'
+										title : '性别',
+										formatter : function(value, row, index) {
+											if (row.sex == 1){
+												return '男';
+											} else {
+												return '女';
+											}
+										}
 									},
 									{
 										field : 'tel',
-										title : '联系电话',
-										visible : false
+										title : '联系电话'
 									},
 									{
 										field : 'address',
@@ -104,7 +145,7 @@
 										title : '所属仓库ID'
 									},
 									{
-										field : "BelongAddress",
+										field : "belongAddress",
 										title : "所属仓库地址"
 									},
 									{
@@ -172,8 +213,8 @@
 		if(row.repositoryBelongID != null){
 			$('#repositoryAdmin_repoID_edit').append("<option value='" + row.repositoryBelongID + "'>" + row.repositoryBelongID + "</option>");
 		}
-			$('#repositoryAdmin_repoID_edit').append("<option value=''>不指派</option>");
-		
+		$('#repositoryAdmin_repoID_edit').append("<option value=''>不指派</option>");
+
 		$('#repositoryInfo').removeClass('hide').addClass('hide');
 		$.ajax({
 			type : 'GET',
@@ -184,7 +225,9 @@
 				data = response.data;
 				unassignRepoCache = data;
 				$.each(data,function(index,element){
-					$('#repositoryAdmin_repoID_edit').append("<option value='" + element.id + "'>" + element.id + "</option>");
+					if (element.id != row.repositoryBelongID){
+						$('#repositoryAdmin_repoID_edit').append("<option value='" + element.id + "'>" + element.id + "</option>");
+					}
 				})
 			}
 		});
@@ -268,7 +311,7 @@
 						tel : $('#repositoryAdmin_tel_edit').val(),
 						address : $('#repositoryAdmin_address_edit').val(),
 						birth : $('#repositoryAdmin_birth_edit').val(),
-						repositoryBelongID : $('#repositoryAdmin_repoID_edit').val()
+						repositoryBelongID : $('#repositoryAdmin_repoID_edit').val(),
 					}
 
 					// ajax
@@ -300,7 +343,6 @@
 						}
 					});
 				});
-
 		$('#repositoryAdmin_repoID_edit').change(function(){
 			var repositoryID = $(this).val();
 			$('#repositoryInfo').removeClass('hide').addClass('hide');
@@ -312,7 +354,6 @@
 					$('#repositoryInfo').removeClass('hide');
 				}
 			})
-			
 		})
 	}
 
@@ -355,6 +396,21 @@
 		})
 	}
 
+	//生成指定范围随机数
+	function randomNum(minNum,maxNum){
+		switch(arguments.length){
+			case 1:
+				return parseInt(Math.random()*minNum+1,10);
+				break;
+			case 2:
+				return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10);
+				break;
+			default:
+				return 0;
+				break;
+		}
+	}
+
 	// 添加仓库管理员信息
 	function addRepositoryAdminAction() {
 		$('#add_repositoryAdmin').click(function() {
@@ -363,11 +419,13 @@
 
 		$('#add_modal_submit').click(function() {
 			var data = {
+				id : randomNum(10000,99999),
 				name : $('#repositoryAdmin_name').val(),
 				tel : $('#repositoryAdmin_tel').val(),
 				sex : $('#repositoryAdmin_sex').val(),
 				address : $('#repositoryAdmin_address').val(),
-				birth : $('#repositoryAdmin_birth').val()
+				birth : $('#repositoryAdmin_birth').val(),
+				// repositoryBelongID : $('#repositoryBelongID').val()
 			}
 			// ajax
 			$.ajax({
@@ -384,7 +442,7 @@
 					if (response.result == "success") {
 						type = "success";
 						msg = "仓库管理员添加成功";
-						append = '注意：仓库管理员的系统初始密码为该ID';
+						append = '注意：仓库管理员的系统初始密码为该ID:'+data.id;
 					} else if (response.result == "error") {
 						type = "error";
 						msg = "仓库管理员添加失败";
@@ -597,9 +655,9 @@
 				<button class="btn btn-sm btn-default" id="add_repositoryAdmin">
 					<span class="glyphicon glyphicon-plus"></span> <span>添加仓库管理员信息</span>
 				</button>
-				<button class="btn btn-sm btn-default" id="import_repositoryAdmin">
+				<%--<button class="btn btn-sm btn-default" id="import_repositoryAdmin">
 					<span class="glyphicon glyphicon-import"></span> <span>导入</span>
-				</button>
+				</button>--%>
 				<button class="btn btn-sm btn-default" id="export_repositoryAdmin">
 					<span class="glyphicon glyphicon-export"></span> <span>导出</span>
 				</button>
@@ -646,8 +704,8 @@
 								</label>
 								<div class="col-md-5 col-sm-5">
 									<select name="" class="form-control" id="repositoryAdmin_sex">
-										<option value="男">男性</option>
-										<option value="女">女性</option>
+										<option value="1">男</option>
+										<option value="2">女</option>
 									</select>
 								</div>
 							</div>
@@ -675,6 +733,18 @@
 									<input class="form_date form-control" value="" id="repositoryAdmin_birth" name="repositoryAdmin_birth" placeholder="出生日期">
 								</div>
 							</div>
+							<%--<div class="form-group">
+								<label for="" class="control-label col-md-5 col-sm-5"> <span>所属仓库：</span>
+								</label>
+								<div class="col-md-7 col-sm-7">
+									<form action="" class="form-inline">
+										<div class="form-group">
+											<select name="" id="repositoryBelongID" class="form-control">
+											</select>
+										</div>
+									</form>
+								</div>
+							</div>--%>
 						</form>
 					</div>
 					<div class="col-md-1 col-sm-1"></div>
@@ -918,8 +988,8 @@
 								</label>
 								<div class="col-md-5 col-sm-5">
 									<select name="" class="form-control" id="repositoryAdmin_sex_edit">
-										<option value="男">男性</option>
-										<option value="女">女性</option>
+										<option value="1">男</option>
+										<option value="2">女</option>
 									</select>
 								</div>
 							</div>

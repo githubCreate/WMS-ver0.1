@@ -53,6 +53,8 @@ public interface StockOutMapper {
      * @return 返回所有符合指定要求的出库记录
      */
     List<StockOutDO> selectByRepositoryIDAndDate(@Param("repositoryID") Integer repositoryID,
+                                                 @Param("customerName") String customerName,
+                                                 @Param("goodName") String goodName,
                                                  @Param("startDate") Date startDate,
                                                  @Param("endDate") Date endDate);
 

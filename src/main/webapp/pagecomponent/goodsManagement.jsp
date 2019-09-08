@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 
 <script>
-	var search_type_goods = "none";
+	var search_type_goods = "searchAll";
 	var search_keyWord = "";
 	var selectID;
 
@@ -46,6 +46,15 @@
 	function searchAction() {
 		$('#search_button').click(function() {
 			search_keyWord = $('#search_input').val();
+			if ($("#search_type").html() != "所有"){
+				if (search_keyWord == ""){
+					var type = "error";
+					var msg = "请输入"+$("#search_type").html();
+					var append = '';
+					showMsg(type, msg, append);
+					return;
+				}
+			}
 			tableRefresh();
 		})
 	}
@@ -83,6 +92,10 @@
 									{
 										field : 'size',
 										title : '货物尺寸'
+									},
+								    {
+										field : 'material',
+										title : '货物配料'
 									},
 									{
 										field : 'value',
@@ -144,6 +157,7 @@
 		$('#goods_name_edit').val(row.name);
 		$('#goods_type_edit').val(row.type);
 		$('#goods_size_edit').val(row.size);
+		$('#goods_material_edit').val(row.material);
 		$('#goods_value_edit').val(row.value);
 	}
 
@@ -192,6 +206,7 @@
 						name : $('#goods_name_edit').val(),
 						type : $('#goods_type_edit').val(),
 						size : $('#goods_size_edit').val(),
+						material : $('#goods_material_edit').val(),
 						value : $('#goods_value_edit').val(),
 					}
 
@@ -276,6 +291,7 @@
 				name : $('#goods_name').val(),
 				type : $('#goods_type').val(),
 				size : $('#goods_size').val(),
+				material : $('#goods_material').val(),
 				value : $('#goods_value').val(),
 			}
 			// ajax
@@ -304,6 +320,7 @@
 					$('#goods_name').val("");
 					$('#goods_type').val("");
 					$('#goods_size').val("");
+					$('#goods_material').val("");
 					$('#goods_value').val("");
 					$('#goods_form').bootstrapValidator("resetForm", true);
 				},
@@ -558,6 +575,14 @@
 								<div class="col-md-8 col-sm-8">
 									<input type="text" class="form-control" id="goods_size"
 										name="goods_size" placeholder="货物尺寸">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物配料：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="goods_material"
+										name="goods_material" placeholder="货物配料">
 								</div>
 							</div>
 							<div class="form-group">
@@ -821,6 +846,14 @@
 								<div class="col-md-8 col-sm-8">
 									<input type="text" class="form-control" id="goods_size_edit"
 										name="goods_size" placeholder="货物尺寸">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="control-label col-md-4 col-sm-4"> <span>货物配料：</span>
+								</label>
+								<div class="col-md-8 col-sm-8">
+									<input type="text" class="form-control" id="goods_material_edit"
+										name="goods_material" placeholder="货物配料">
 								</div>
 							</div>
 							<div class="form-group">
